@@ -3,8 +3,6 @@ if (process.env.NODE_ENV === "development") {
 }
 
 import {
-  useRef,
-  useEffect,
   useState,
   useCallback,
   useMemo
@@ -27,11 +25,9 @@ import { closeBrackets } from "@codemirror/next/closebrackets";
 import { specialChars } from "@codemirror/next/special-chars";
 import { multipleSelections } from "@codemirror/next/multiple-selections";
 import { search, defaultSearchKeymap } from "@codemirror/next/search";
-// import { autocomplete, startCompletion } from "@codemirror/next/autocomplete";
-
 import { html } from "@codemirror/next/lang-html";
-// import { javascript } from "@codemirror/next/lang-javascript";
 import { defaultHighlighter } from "@codemirror/next/highlight";
+// import { javascript } from "@codemirror/next/lang-javascript";
 
 //import { esLint } from "@codemirror/next/lang-javascript";
 // @ts-ignore
@@ -98,7 +94,7 @@ function App() {
         <button onClick={() => setCounter(counter + 1)}>+</button>
       </div>
       <Codemirror
-        doc={doc}
+        value={doc}
         extensions={extensions}
         onTextChange={onTextChange}
       />

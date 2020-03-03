@@ -6,7 +6,7 @@ import { EditorView } from "@codemirror/next/view";
 import { EditorState } from "@codemirror/next/state";
 
 const Codemirror = memo(function Codemirror({
-	doc = "",
+	value = "",
 	extensions = [],
 	onUpdate = null,
 	onTextChange = null,
@@ -16,7 +16,7 @@ const Codemirror = memo(function Codemirror({
 	useEffect(() => {
 		let view = new EditorView({
 			state: EditorState.create({
-				doc,
+				value,
 				extensions
 			}),
 			dispatch: t => {
