@@ -11,7 +11,8 @@
 		"public": true
 	},
 	"scripts": {
-		"build": "parcel build ."
+		"build": "parcel build .",
+		"prepublish": "yarn build"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.8.6",
