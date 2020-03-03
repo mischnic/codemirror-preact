@@ -1,0 +1,19 @@
+{
+	"name": "@mischnic/codemirror-preact",
+	"module": "dist/index.js",
+	"source": "src/index.js",
+	"version": "0.0.0",
+	"peerDependencies": {
+		"@codemirror/next": "^0.4.0",
+		"preact": "^10.3.3"
+	},
+	"scripts": {
+		"build": "parcel build ."
+	},
+	"devDependencies": {
+		"@babel/core": "^7.8.6",
+		"@babel/plugin-transform-react-jsx": "^7.8.3",
+		"parcel": "^2.0.0-nightly.131"
+	},
+	"browserslist": ["Chrome 70"]
+}

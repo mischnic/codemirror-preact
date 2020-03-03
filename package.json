@@ -1,0 +1,7 @@
+{
+	"workspaces": [
+		"codemirror-preact",
+		"demo"
+	],
+	"private": true
+}

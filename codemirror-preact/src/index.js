@@ -1,0 +1,43 @@
+import { useRef, useEffect } from "preact/hooks";
+import { h } from "preact";
+import { EditorView } from "@codemirror/next/view";
+import { EditorState } from "@codemirror/next/state";
+
+export function Codemirror({
+	doc = "",
+	extensions = [],
+	onUpdate = null,
+	onTextChange = null
+}) {
+	const container = useRef(null);
+	useEffect(() => {
+		let view = new EditorView({
+			state: EditorState.create({
+				doc,
+				extensions
+			}),
+			dispatch: t => {
+				view.update([t]);
+
+				if (onUpdate) {
+					onUpdate(t);
+				}
+
+				if (onTextChange && t.changes.length > 0) {
+					onTextChange({
+						get text() {
+							return view.state.doc.toString();
+						}
+					});
+				}
+				// console.log(t);
+				// console.log(view.state.doc.toString());
+			}
+		});
+
+		container.current.appendChild(view.dom);
+		return () => view.destroy();
+	});
+
+	return <div ref={container} />;
+}

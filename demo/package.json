@@ -1,0 +1,17 @@
+{
+	"name": "demo",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"start": "parcel index.html",
+		"build": "parcel build index.html"
+	},
+	"devDependencies": {
+		"parcel": "^2.0.0-nightly.131"
+	},
+	"dependencies": {
+		"@mischnic/codemirror-preact": "^0.0.0",
+		"@codemirror/next": "^0.4.0",
+		"preact": "^10.3.3"
+	}
+}
