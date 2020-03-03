@@ -1,13 +1,16 @@
-import { useRef, useEffect } from "preact/hooks";
 import { h } from "preact";
+import { useRef, useEffect } from "preact/hooks";
+import { memo } from "preact/compat";
+
 import { EditorView } from "@codemirror/next/view";
 import { EditorState } from "@codemirror/next/state";
 
-export function Codemirror({
+const Codemirror = memo(function Codemirror({
 	doc = "",
 	extensions = [],
 	onUpdate = null,
-	onTextChange = null
+	onTextChange = null,
+	...rest
 }) {
 	const container = useRef(null);
 	useEffect(() => {
@@ -39,5 +42,7 @@ export function Codemirror({
 		return () => view.destroy();
 	});
 
-	return <div ref={container} />;
-}
+	return <div ref={container} {...rest}/>;
+});
+
+export { Codemirror };

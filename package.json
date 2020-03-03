@@ -3,5 +3,8 @@
 		"codemirror-preact",
 		"demo"
 	],
-	"private": true
+	"private": true,
+	"scripts": {
+		"build": "yarn workspace @mischnic/codemirror-preact build"
+	}
 }

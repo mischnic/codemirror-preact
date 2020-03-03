@@ -2,7 +2,13 @@ if (process.env.NODE_ENV === "development") {
   require("preact/debug");
 }
 
-import { useRef, useEffect, useState } from "preact/hooks";
+import {
+  useRef,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo
+} from "preact/hooks";
 import { render, h } from "preact";
 
 import { lineNumbers } from "@codemirror/next/gutter";
@@ -35,15 +41,47 @@ import { defaultHighlighter } from "@codemirror/next/highlight";
 import { Codemirror } from "@mischnic/codemirror-preact";
 
 function App() {
-  let [doc, setDoc] = useState(`<script>
+  const [doc, setDoc] = useState(`<script>
   const {readFile} = require("fs");
   readFile("package.json", "utf8", (err, data) => {
     console.log(data);
   });
 </script>`);
 
+  const [counter, setCounter] = useState(0);
+
+  const onTextChange = useCallback(({ text }) => console.log(text), []);
+
+  const extensions = useMemo(
+    () => [
+      lineNumbers(),
+      specialChars(),
+      history(),
+      foldGutter(),
+      multipleSelections(),
+      html(),
+      // linter(esLint(new Linter())),
+      search({ keymap: defaultSearchKeymap }),
+      defaultHighlighter,
+      bracketMatching(),
+      closeBrackets,
+      // autocomplete(),
+      keymap({
+        "Mod-z": undo,
+        "Mod-Shift-z": redo
+        // "Mod-u": view => undoSelection(view) || true,
+        // [ /Mac/.test(navigator.platform) ? "Mod-Shift-u" : "Alt-u"]: redoSelection,
+        // Tab: indentSelection,
+        // "Ctrl-Space": startCompletion
+        // "Shift-Mod-m": openLintPanel
+      }),
+      keymap(baseKeymap)
+    ],
+    []
+  );
+
   return (
-    <div>
+    <div style={{ height: "100%" }}>
       <button
         onClick={() =>
           setDoc(`<style>
@@ -55,33 +93,14 @@ function App() {
       >
         Update!
       </button>
+      <div>
+        Counter: {counter}
+        <button onClick={() => setCounter(counter + 1)}>+</button>
+      </div>
       <Codemirror
         doc={doc}
-        extensions={[
-          lineNumbers(),
-          specialChars(),
-          history(),
-          foldGutter(),
-          multipleSelections(),
-          html(),
-          // linter(esLint(new Linter())),
-          search({ keymap: defaultSearchKeymap }),
-          defaultHighlighter,
-          bracketMatching(),
-          closeBrackets,
-          // autocomplete(),
-          keymap({
-            "Mod-z": undo,
-            "Mod-Shift-z": redo
-            // "Mod-u": view => undoSelection(view) || true,
-            // [ /Mac/.test(navigator.platform) ? "Mod-Shift-u" : "Alt-u"]: redoSelection,
-            // Tab: indentSelection,
-            // "Ctrl-Space": startCompletion
-            // "Shift-Mod-m": openLintPanel
-          }),
-          keymap(baseKeymap)
-        ]}
-        onTextChange={({ text }) => console.log(text)}
+        extensions={extensions}
+        onTextChange={onTextChange}
       />
     </div>
   );
