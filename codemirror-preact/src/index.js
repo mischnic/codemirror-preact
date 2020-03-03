@@ -16,7 +16,7 @@ const Codemirror = memo(function Codemirror({
 	useEffect(() => {
 		let view = new EditorView({
 			state: EditorState.create({
-				value,
+				doc: value,
 				extensions
 			}),
 			dispatch: t => {
