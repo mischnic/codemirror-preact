@@ -6,12 +6,15 @@
 		"start": "parcel index.html",
 		"build": "parcel build index.html"
 	},
-	"devDependencies": {
-		"parcel": "^2.0.0-nightly.131"
-	},
 	"dependencies": {
-		"@mischnic/codemirror-preact": "^0.0.0",
 		"@codemirror/next": "^0.4.0",
+		"@mischnic/codemirror-preact": "^0.0.2",
 		"preact": "^10.3.3"
-	}
+	},
+	"devDependencies": {
+		"parcel": "^2.0.0-nightly.140"
+	},
+	"browserslist": [
+		"Chrome 70"
+	]
 }

@@ -3,46 +3,96 @@ import { useRef, useEffect } from "preact/hooks";
 import { memo } from "preact/compat";
 
 import { EditorView } from "@codemirror/next/view";
-import { EditorState } from "@codemirror/next/state";
+import {
+	EditorState,
+	Change,
+	Transaction,
+	EditorSelection,
+	SelectionRange
+} from "@codemirror/next/state";
+
+const onHandleUpdateDefault = (view, t) => view.update(t);
 
 const Codemirror = memo(function Codemirror({
 	value = "",
 	extensions = [],
-	onUpdate = null,
 	onTextChange = null,
+	onHandleUpdate = false,
+	readOnly = false,
 	...rest
 }) {
 	const container = useRef(null);
+	const editor = useRef(null);
+	const dispatchRefs = useRef({});
+
 	useEffect(() => {
-		let view = new EditorView({
+		// first render
+		let view = (editor.current = new EditorView({
 			state: EditorState.create({
 				doc: value,
 				extensions
 			}),
 			dispatch: t => {
-				view.update([t]);
-
-				if (onUpdate) {
-					onUpdate(t);
+				const {
+					current: { onTextChange, readOnly, onHandleUpdate }
+				} = dispatchRefs;
+				if (readOnly) {
+					if (t.selectionSet && !t.docChanged) {
+						onHandleUpdate(view, [
+							new Transaction(view.state).setSelection(
+								t.selection
+							)
+						]);
+					} else {
+						onHandleUpdate(view, []);
+					}
+				} else {
+					onHandleUpdate(view, [t]);
 				}
 
-				if (onTextChange && t.changes.length > 0) {
-					onTextChange({
-						get text() {
-							return view.state.doc.toString();
-						}
-					});
+				if (!readOnly && onTextChange && t.docChanged) {
+					onTextChange(view);
 				}
-				// console.log(t);
-				// console.log(view.state.doc.toString());
 			}
-		});
+		}));
 
 		container.current.appendChild(view.dom);
 		return () => view.destroy();
-	});
+	}, [extensions]); // TODO handle extensions change more gracefully
 
-	return <div ref={container} {...rest}/>;
+	useEffect(() => {
+		dispatchRefs.current.readOnly = readOnly;
+		dispatchRefs.current.onHandleUpdate =
+			onHandleUpdate || onHandleUpdateDefault;
+		dispatchRefs.current.onTextChange = onTextChange;
+	}, [readOnly, onHandleUpdate, onTextChange]);
+
+	useEffect(() => {
+		// rerenders
+		const ranges = editor.current.state.selection.ranges
+			.map(v => {
+				if (v.from > value.length) {
+					return false;
+				} else if (value.length < v.to) {
+					return new SelectionRange(
+						v.anchor,
+						v.head - (v.to - value.length)
+					);
+				} else return v;
+			})
+			.filter(Boolean);
+		let selection = ranges.length > 0 && EditorSelection.create(ranges, 0);
+
+		const t = new Transaction(editor.current.state).change(
+			new Change(0, editor.current.state.doc.length, value.split("\n"))
+		);
+		if (selection) t.setSelection(selection);
+
+		const handleUpdate = onHandleUpdate || onHandleUpdateDefault;
+		editor.current.update([t]);
+	}, [value]);
+
+	return <div ref={container} {...rest} />;
 });
 
 export { Codemirror };

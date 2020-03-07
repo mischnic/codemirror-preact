@@ -2,11 +2,7 @@ if (process.env.NODE_ENV === "development") {
   require("preact/debug");
 }
 
-import {
-  useState,
-  useCallback,
-  useMemo
-} from "preact/hooks";
+import { useState, useCallback, useMemo } from "preact/hooks";
 import { render, h } from "preact";
 
 import { lineNumbers } from "@codemirror/next/gutter";
@@ -45,8 +41,15 @@ function App() {
 </script>`);
 
   const [counter, setCounter] = useState(0);
+  const [readOnly, setReadOnly] = useState(false);
 
-  const onTextChange = useCallback(({ text }) => console.log(text), []);
+  const onTextChange = useCallback(view => {
+    setDoc(view.state.doc.toString());
+  }, []);
+
+  // const onHandleUpdate = useCallback((view, t) => {
+  //   view.update(t);
+  // }, []);
 
   const extensions = useMemo(
     () => [
@@ -89,14 +92,20 @@ function App() {
       >
         Update!
       </button>
+      <button onClick={() => setReadOnly(!readOnly)}>Toggle readOnly</button>
       <div>
         Counter: {counter}
         <button onClick={() => setCounter(counter + 1)}>+</button>
+      </div>
+      <div>
+        State: <code>{doc}</code>
       </div>
       <Codemirror
         value={doc}
         extensions={extensions}
         onTextChange={onTextChange}
+        // onHandleUpdate={onHandleUpdate}
+        readOnly={readOnly}
       />
     </div>
   );
