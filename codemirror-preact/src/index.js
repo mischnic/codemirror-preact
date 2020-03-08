@@ -36,19 +36,7 @@ const Codemirror = memo(function Codemirror({
 				const {
 					current: { onTextChange, readOnly, onHandleUpdate }
 				} = dispatchRefs;
-				if (readOnly) {
-					if (t.selectionSet && !t.docChanged) {
-						onHandleUpdate(view, [
-							new Transaction(view.state).setSelection(
-								t.selection
-							)
-						]);
-					} else {
-						onHandleUpdate(view, []);
-					}
-				} else {
-					onHandleUpdate(view, [t]);
-				}
+				onHandleUpdate(view, readOnly && t.docChanged ? [] : [t]);
 
 				if (!readOnly && onTextChange && t.docChanged) {
 					onTextChange(view);
