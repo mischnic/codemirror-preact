@@ -10,6 +10,7 @@ import {
 	EditorSelection,
 	SelectionRange
 } from "@codemirror/next/state";
+import { setDiagnostics } from "@codemirror/next/lint";
 
 const onHandleUpdateDefault = (view, t) => view.update(t);
 
@@ -19,11 +20,52 @@ const Codemirror = memo(function Codemirror({
 	onTextChange = null,
 	onHandleUpdate = false,
 	readOnly = false,
+	diagnostics = null,
 	...rest
 }) {
 	const container = useRef(null);
 	const editor = useRef(null);
 	const dispatchRefs = useRef({});
+
+	useEffect(() => {
+		dispatchRefs.current.readOnly = readOnly;
+		dispatchRefs.current.onHandleUpdate =
+			onHandleUpdate || onHandleUpdateDefault;
+		dispatchRefs.current.onTextChange = onTextChange;
+	}, [readOnly, onHandleUpdate, onTextChange]);
+
+	useEffect(() => {
+		if (!editor.current) return;
+
+		// rerenders
+		const ranges = editor.current.state.selection.ranges
+			.map(v => {
+				if (v.from > value.length) {
+					return false;
+				} else if (value.length < v.to) {
+					return new SelectionRange(
+						v.anchor,
+						v.head - (v.to - value.length)
+					);
+				} else return v;
+			})
+			.filter(Boolean);
+		let selection = ranges.length > 0 && EditorSelection.create(ranges, 0);
+
+		const t = editor.current.state
+			.t()
+			.change(
+				new Change(
+					0,
+					editor.current.state.doc.length,
+					value.split("\n")
+				)
+			);
+		if (selection) t.setSelection(selection);
+
+		const handleUpdate = onHandleUpdate || onHandleUpdateDefault;
+		editor.current.update([t]);
+	}, [value]);
 
 	useEffect(() => {
 		// first render
@@ -49,36 +91,13 @@ const Codemirror = memo(function Codemirror({
 	}, [extensions]); // TODO handle extensions change more gracefully
 
 	useEffect(() => {
-		dispatchRefs.current.readOnly = readOnly;
-		dispatchRefs.current.onHandleUpdate =
-			onHandleUpdate || onHandleUpdateDefault;
-		dispatchRefs.current.onTextChange = onTextChange;
-	}, [readOnly, onHandleUpdate, onTextChange]);
+		// first and subsequent render
 
-	useEffect(() => {
-		// rerenders
-		const ranges = editor.current.state.selection.ranges
-			.map(v => {
-				if (v.from > value.length) {
-					return false;
-				} else if (value.length < v.to) {
-					return new SelectionRange(
-						v.anchor,
-						v.head - (v.to - value.length)
-					);
-				} else return v;
-			})
-			.filter(Boolean);
-		let selection = ranges.length > 0 && EditorSelection.create(ranges, 0);
-
-		const t = new Transaction(editor.current.state).change(
-			new Change(0, editor.current.state.doc.length, value.split("\n"))
-		);
-		if (selection) t.setSelection(selection);
-
-		const handleUpdate = onHandleUpdate || onHandleUpdateDefault;
+		const t = editor.current.state
+			.t()
+			.annotate(setDiagnostics, diagnostics);
 		editor.current.update([t]);
-	}, [value]);
+	}, [diagnostics]);
 
 	return <div ref={container} {...rest} />;
 });
