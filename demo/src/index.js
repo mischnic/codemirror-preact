@@ -5,37 +5,20 @@ if (process.env.NODE_ENV === "development") {
 import { render, h, Fragment } from "preact";
 import { useState, useCallback, useMemo } from "preact/hooks";
 
-import { lineNumbers } from "@codemirror/next/gutter";
-import { keymap } from "@codemirror/next/keymap";
 import {
-  history,
-  redo,
-  redoSelection,
-  undo,
-  undoSelection
-} from "@codemirror/next/history";
-import { foldCode, unfoldCode, foldGutter } from "@codemirror/next/fold";
-import { baseKeymap, indentSelection } from "@codemirror/next/commands";
-import { bracketMatching } from "@codemirror/next/matchbrackets";
-import { closeBrackets } from "@codemirror/next/closebrackets";
-import { specialChars } from "@codemirror/next/special-chars";
-import { multipleSelections } from "@codemirror/next/multiple-selections";
-import { search, defaultSearchKeymap } from "@codemirror/next/search";
+  EditorState,
+  EditorView,
+  basicSetup,
+} from "@codemirror/next/basic-setup";
 import { html } from "@codemirror/next/lang-html";
-import { defaultHighlighter } from "@codemirror/next/highlight";
 // import { javascript } from "@codemirror/next/lang-javascript";
 
 // import { esLint } from "@codemirror/next/lang-javascript";
 // @ts-ignore
 //import Linter from "eslint4b-prebuilt";
-import {
-  linter,
-  linting,
-  openLintPanel,
-  closeLintPanel
-} from "@codemirror/next/lint";
+import { linter, openLintPanel, closeLintPanel } from "@codemirror/next/lint";
 
-import { Codemirror } from "@mischnic/codemirror-preact";
+import { Codemirror, createState } from "@mischnic/codemirror-preact";
 
 const DIAGNOSTICS = [
   {
@@ -43,102 +26,94 @@ const DIAGNOSTICS = [
     to: 18,
     severity: "error",
     source: "MyLinter",
-    message: "Unknown?"
+    message: "Unknown?",
   },
   {
     from: 101,
     to: 112,
     severity: "error",
     source: "MyLinter",
-    message: "Don't log\nNext line",
+    message: "XYZ",
     actions: [
       { name: "Remove", apply() {} },
-      { name: "Ignore", apply() {} }
-    ]
-  }
+      { name: "Ignore", apply() {} },
+    ],
+  },
 ];
 
+function extensions() {
+  return [
+    basicSetup,
+    html(),
+    // linter(() => DIAGNOSTICS),
+    // keymap({
+    //   "Mod-z": undo,
+    //   "Mod-Shift-z": redo,
+    //   // "Mod-u": view => undoSelection(view) || true,
+    //   // [ /Mac/.test(navigator.platform) ? "Mod-Shift-u" : "Alt-u"]: redoSelection,
+    //   // Tab: indentSelection,
+    //   // "Ctrl-Space": startCompletion
+    //   "Ctrl-Cmd-l": openLintPanel
+    //   // "Shift-l": closeLintPanel
+    // })
+  ];
+}
+
 function App() {
-  const [doc, setDoc] = useState(`<script>
+  const [state, setState] = useState(
+    createState(
+      `<script>
   const {readFile} = require("fs");
   readFile("package.json", "utf8", (err, data) => {
     console.log(data);
   });
-</script>`);
+</script>`,
+      extensions()
+    )
+  );
 
   const [counter, setCounter] = useState(0);
   const [readOnly, setReadOnly] = useState(false);
-  const [diagnostics, setDiagnostics] = useState(null);
+  const [diagnostics, setDiagnostics] = useState(false);
 
-  const onTextChange = useCallback(view => {
-    setDoc(view.state.doc.toString());
+  const onChange = useCallback((state) => {
+    setState(state);
   }, []);
-
-  // const onHandleUpdate = useCallback((view, t) => {
-  //   view.update(t);
-  // }, []);
-
-  const extensions = useMemo(
-    () => [
-      lineNumbers(),
-      specialChars(),
-      history(),
-      foldGutter(),
-      multipleSelections(),
-      html(),
-      // linter(MyLinter),
-      linting(),
-      search({ keymap: defaultSearchKeymap }),
-      defaultHighlighter,
-      bracketMatching(),
-      closeBrackets,
-      // autocomplete(),
-      keymap(baseKeymap),
-      keymap({
-        "Mod-z": undo,
-        "Mod-Shift-z": redo,
-        // "Mod-u": view => undoSelection(view) || true,
-        // [ /Mac/.test(navigator.platform) ? "Mod-Shift-u" : "Alt-u"]: redoSelection,
-        // Tab: indentSelection,
-        // "Ctrl-Space": startCompletion
-        "Ctrl-Cmd-l": openLintPanel
-        // "Shift-l": closeLintPanel
-      })
-    ],
-    []
-  );
 
   return (
     <>
       <button
         onClick={() =>
-          setDoc(`<style>
+          setState(
+            createState(
+              `<style>
   body {
     color: red;
   }
-</style>`)
+</style>`,
+              extensions()
+            )
+          )
         }
       >
         Update!
       </button>
       <button onClick={() => setReadOnly(!readOnly)}>Toggle readOnly</button>
-      <button onClick={() => setDiagnostics(DIAGNOSTICS)}>Build</button>
+      <button onClick={() => setDiagnostics(!diagnostics)}>Build</button>
       <div>
         Counter: {counter}&nbsp;
         <button onClick={() => setCounter(counter + 1)}>&nbsp;</button>
       </div>
       <Codemirror
-        value={doc}
-        extensions={extensions}
-        onTextChange={onTextChange}
-        // onHandleUpdate={onHandleUpdate}
+        state={state}
+        onChange={onChange}
         readOnly={readOnly}
-        diagnostics={diagnostics}
+        diagnostics={diagnostics && DIAGNOSTICS}
         class="editor"
       />
-      State:{" "}
+      State:
       <pre>
-        <code>{doc}</code>
+        <code>{state.doc.toString()}</code>
       </pre>
     </>
   );

@@ -7,14 +7,14 @@
 		"build": "parcel build index.html"
 	},
 	"dependencies": {
-		"@codemirror/next": "^0.4.0",
-		"@mischnic/codemirror-preact": "^0.0.4",
-		"preact": "^10.3.4"
+		"@codemirror/next": "^0.8.0",
+		"@mischnic/codemirror-preact": "^0.0.5",
+		"preact": "^10.4.6"
 	},
 	"devDependencies": {
-		"parcel": "^2.0.0-nightly.146"
+		"parcel": "^2.0.0-nightly.344"
 	},
 	"browserslist": [
-		"Chrome 70"
+		"last 1 Chrome version"
 	]
 }
