@@ -9,10 +9,10 @@
 	"dependencies": {
 		"@codemirror/next": "^0.12.0",
 		"@mischnic/codemirror-preact": "^0.0.5",
-		"preact": "^10.4.6"
+		"preact": "^10.5.2"
 	},
 	"devDependencies": {
-		"parcel": "^2.0.0-nightly.344"
+		"parcel": "^2.0.0-nightly.409"
 	},
 	"browserslist": [
 		"last 1 Chrome version"
