@@ -905,18 +905,20 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@codemirror/next@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@codemirror/next/-/next-0.8.0.tgz#60d2f9045bb3a1bbed56167634d6d5907516fea7"
-  integrity sha512-bDKoKh8hGxTFRdGEJtVYiefb4Zj/sSOEZhjwWb4+G0kYt1EOkYkZiYzndqwPgB6hjyG+STyS1lDYASia5pOvRA==
+"@codemirror/next@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@codemirror/next/-/next-0.12.0.tgz#653817ee1ca1a19fec9c17849522a34a79a5f75d"
+  integrity sha512-CMbEVFgn3gnhZv07/zZy0PE9uYIOkX5ogiLB6RJIf+bl+CoMvDgauwjipLzdlEIzmwT5w3bv4KYbDVTAmz8YOA==
   dependencies:
-    lezer "^0.9.0"
-    lezer-css "^0.9.0"
-    lezer-html "^0.9.0"
-    lezer-javascript "^0.9.0"
-    lezer-python "^0.9.0"
-    lezer-tree "^0.9.0"
-    style-mod "^2.2.2"
+    lezer "^0.10.3"
+    lezer-cpp "^0.10.1"
+    lezer-css "^0.10.1"
+    lezer-html "^0.10.0"
+    lezer-java "^0.10.0"
+    lezer-javascript "^0.10.1"
+    lezer-python "^0.10.0"
+    lezer-tree "^0.10.0"
+    style-mod "^2.3.0"
     w3c-keyname "^2.2.4"
 
 "@iarna/toml@^2.2.0":
@@ -4022,45 +4024,59 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lezer-css@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/lezer-css/-/lezer-css-0.9.0.tgz#fc18e5056c25a62706013d30e8661ed4052afb40"
-  integrity sha512-rpK/O4++1K+zkHuo4rWZrJiFeaJ1vITWWPTqJK2wkwvbzd3FqvJmFC92oLC43eRhloOuiCD7R2nueRZAR6Oocg==
+lezer-cpp@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/lezer-cpp/-/lezer-cpp-0.10.1.tgz#277ae8da3929fadb906aa2deafa1cd0c974b6f8f"
+  integrity sha512-i3NNrRBB2LPMcAnbxZcSg3dMHlz22VdQrABK70t5lNSgerqd7bW0zxW8c7qc26sIKtR4fRtcgXeJzx/JaMPDiA==
   dependencies:
-    lezer "^0.9.0"
+    lezer "^0.10.1"
 
-lezer-html@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/lezer-html/-/lezer-html-0.9.0.tgz#1dc269e072fa576da08e886e945050ab967a6521"
-  integrity sha512-CLceSQ5mOxQnqZXROX1+A34jAelJaSwiPyOLDMXk4SFLvPOIq/WkAlLyquJ2wY3JaWCwkrdPsP7OzVHd5unpfQ==
+lezer-css@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/lezer-css/-/lezer-css-0.10.1.tgz#762d1cd0cb45dd914422aac219e4ba4b9ae39894"
+  integrity sha512-NlvFFgp2lz/SBeBwSW4CFHiAdqcHdQ1kCGBA9DKjlZsJAEjT+TulowlGWVo3KgziWGTLW85aBHwN2yvj+OTJJQ==
   dependencies:
-    lezer "^0.9.0"
+    lezer "^0.10.0"
 
-lezer-javascript@^0.9.0:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/lezer-javascript/-/lezer-javascript-0.9.1.tgz#0a06c260979c172a63f7dbbcf6e57dcfe1137d9e"
-  integrity sha512-XoZeWiVAoo41jywONr5ajGxK8xaS1AeObB3amVXh3Jc4pqN8Y8uBY/bQ9deh1blm7bvZRbQmJWjrb1mCEEy8UQ==
+lezer-html@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/lezer-html/-/lezer-html-0.10.0.tgz#363c43bc50f8c5521be22980f9080a560b0b7bcd"
+  integrity sha512-kLZRjP3wSHLpSS1R+x3LpZJ00iTk96Kzw1Lf02fxNxh3xGmcl19Q6+i54zyPwmr65H/3TBJtvXLfeNF0OIRyZw==
   dependencies:
-    lezer "^0.9.0"
+    lezer "^0.10.0"
 
-lezer-python@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/lezer-python/-/lezer-python-0.9.0.tgz#6b3a7de643a1ea1a0ac7d8b23b9007f484b961ac"
-  integrity sha512-sJ/YY48uQMZDTqQx6GCkqnyhxjph3YghcLqdrAyU8KVKxMHvwWRiSdEKtp3k7uQLhP4Bzp5NfkAFaSEK6wH1Mw==
+lezer-java@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/lezer-java/-/lezer-java-0.10.0.tgz#5b9d0d578009c83fd58fe2645d261106cf9a2ba1"
+  integrity sha512-F0ejt+CCuK367ocKhyx3+GlQmF5sE/HMY/qsgGVyH9ScpbfVtlTFYHa/gvqMASipTwyAEdfnzfvxgQ7A0fFiFw==
   dependencies:
-    lezer "^0.9.0"
+    lezer "^0.10.3"
 
-lezer-tree@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/lezer-tree/-/lezer-tree-0.9.0.tgz#c62aee4ddcd18e210369162ea1c93cd10365f80f"
-  integrity sha512-bz/jTNrQFCJ7GBQIkw8y44DWMKL+rrPh40GnrFhnnrezA22T8US38gJAnAAv23zYsoYQfHmwCHJpxv9A3E1OTQ==
-
-lezer@^0.9.0:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/lezer/-/lezer-0.9.1.tgz#33c4f57f6a097bf7312cff4fba3ddf3f7cd6c94b"
-  integrity sha512-mvLVBOmh/Ti96qRkQRcI1ZiEDdOgWo4pBRq4ivmQlcRF9L2jH0kND5tm6CZC7OUPZiQfjT/a7ULVfmryGFCXsA==
+lezer-javascript@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/lezer-javascript/-/lezer-javascript-0.10.1.tgz#e26da73f3c5ae185b3725712e32043c5f8023fd2"
+  integrity sha512-Ly4EM83H/40VqoKSyQG71GstAfq7dFj9fR2d7X/M7vH8hTeN9kky6lPEiZIEPusnMlcdziq9/XNIXI/RaD33SQ==
   dependencies:
-    lezer-tree "^0.9.0"
+    lezer "^0.10.0"
+
+lezer-python@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/lezer-python/-/lezer-python-0.10.0.tgz#bd0e63c0b49ebd96258aea0852a49087a801c754"
+  integrity sha512-cMn88O/v3/91sZjvab4AcGZasT0r5QaLoyZi4thzLa3fWhpPXYriRtYSDjeBfQg4nuuRb473ADDInxGZKTllqA==
+  dependencies:
+    lezer "^0.10.0"
+
+lezer-tree@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/lezer-tree/-/lezer-tree-0.10.0.tgz#e7bb3fbd604a718fa43d373e6240a2600d7c5ea2"
+  integrity sha512-77hwilCuD4azYqwazv4A6EL7mKiSPcqgJV4V173hLV3UkAKa6/smNHeROhIzzWHLU6Y5qtR1mRf22RFzE3fVrg==
+
+lezer@^0.10.0, lezer@^0.10.1, lezer@^0.10.3:
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/lezer/-/lezer-0.10.4.tgz#08a1bee01511aa3ecfbea2f1c35391f1af7e319b"
+  integrity sha512-ltjjt6A0TRUMFxjgAn/Vnxnj7Mv0D9UFHH2hHiNAjT72incbeKheuuJ77GUaAD+D9jC8NasGuFwUx+zwvi+wxg==
+  dependencies:
+    lezer-tree "^0.10.0"
 
 lines-and-columns@^1.1.6:
   version "1.1.6"
@@ -5777,10 +5793,10 @@ strip-final-newline@^2.0.0:
   resolved "https://registry.yarnpkg.com/strip-final-newline/-/strip-final-newline-2.0.0.tgz#89b852fb2fcbe936f6f4b3187afb0a12c1ab58ad"
   integrity sha512-BrpvfNAE3dcvq7ll3xVumzjKjZQ5tI1sEUIKr3Uoks0XUl45St3FlatVqef9prk4jRDzhW6WZg+3bk93y6pLjA==
 
-style-mod@^2.2.2:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/style-mod/-/style-mod-2.2.3.tgz#44ac9ff663f3129a88e8aad952bac75f49073381"
-  integrity sha512-xeT8Ky7LVF6a+kbdvzwcdyz7IVhNUK1uZh78kMPS7j6/yTUA8jF0e3yuEsLCR0VX7rxMR4ppTTXSSYQAPSD+wg==
+style-mod@^2.3.0:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/style-mod/-/style-mod-2.3.1.tgz#ef817c7f6aed5c0a5656e5077bbcdd0ad728d57e"
+  integrity sha512-mSHi5AHMotMZct9AQZJRrDRDFE+hqquWyV5jw026EgNvE8+y6qXtTZscOY455E/Io87c/9bnROmv2AMjA9u8pA==
 
 stylehacks@^4.0.0:
   version "4.0.3"

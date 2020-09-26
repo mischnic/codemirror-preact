@@ -10,7 +10,7 @@ import {
 	EditorSelection,
 	SelectionRange,
 } from "@codemirror/next/state";
-import { setDiagnostics, linter } from "@codemirror/next/lint";
+import { setDiagnostics } from "@codemirror/next/lint";
 import { StateEffect, StateField } from "@codemirror/next/state";
 
 const setReadOnlyEffect = StateEffect.define();
@@ -36,11 +36,13 @@ export function createState(value, extensions) {
 			...extensions,
 			readOnlyState,
 			EditorState.changeFilter.of(
-				(_, state) => !state.field(readOnlyState, false)
+				({startState}) => !startState.field(readOnlyState, false)
 			),
 		],
 	});
 }
+
+let emittedStates = new Set();
 
 const Codemirror = memo(function Codemirror({
 	state,
@@ -54,59 +56,58 @@ const Codemirror = memo(function Codemirror({
 	}
 
 	const container = useRef(null);
-	const editor = useRef(null);
+	const view = useRef(null);
 	const dispatchRefs = useRef({});
 
 	useEffect(() => {
-		dispatchRefs.current.readOnly = readOnly;
 		dispatchRefs.current.onChange = onChange;
-	}, [readOnly, onChange]);
+	}, [onChange]);
 
 	useEffect(() => {
 		// subsequent render
-		if (!editor.current) {
+		if (!view.current) {
 			return;
 		}
 
-		if (editor.current.state === state) {
+		if (emittedStates.has(state)) {
+			emittedStates.delete(state);
 			return;
 		}
 
-		console.log("change!");
-
-		editor.current.setState(state);
+		view.current.setState(state);
 	}, [state]);
 
 	useEffect(() => {
 		// first render
-		let view = (editor.current = new EditorView({
+		let v = (view.current = new EditorView({
 			state,
 			dispatch: (t) => {
-				const {
-					current: { onChange, readOnly },
-				} = dispatchRefs;
+				const { onChange } = dispatchRefs.current;
 
-				view.update([t]);
-				onChange && onChange(view.state);
+				v.update([t]);
+				if (onChange) {
+					emittedStates.add(v.state);
+					onChange(v.state);
+				}
 			},
 		}));
 
-		container.current.appendChild(view.dom);
-		return () => view.destroy();
+		container.current.appendChild(v.dom);
+		return () => v.destroy();
 	}, []);
 
 	useEffect(() => {
 		// first and subsequent render
-		editor.current.dispatch({
+		view.current.dispatch({
 			effects: setReadOnlyEffect.of(readOnly),
 		});
 	}, [readOnly]);
 
 	useEffect(() => {
 		// first and subsequent render
-		editor.current.dispatch(
+		view.current.dispatch(
 			setDiagnostics(
-				editor.current.state,
+				view.current.state,
 				diagnostics && diagnostics.length > 0 ? diagnostics : []
 			)
 		);
