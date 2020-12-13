@@ -1,14 +1,13 @@
 import { html } from "@codemirror/next/lang-html";
-// import { javascript } from "@codemirror/next/lang-javascript";
 import {
   keymap,
   highlightSpecialChars,
-  multipleSelections,
-  indentOnInput,
+  drawSelection,
 } from "@codemirror/next/view";
-import { Extension } from "@codemirror/next/state";
+import { EditorState } from "@codemirror/next/state";
 import { history, historyKeymap } from "@codemirror/next/history";
 import { foldGutter, foldKeymap } from "@codemirror/next/fold";
+import { indentOnInput } from "@codemirror/next/language";
 import { lineNumbers } from "@codemirror/next/gutter";
 import {
   defaultKeymap,
@@ -32,7 +31,7 @@ import {
   highlightActiveLine,
   highlightSelectionMatches,
 } from "@codemirror/next/highlight-selection";
-import { defaultHighlighter } from "@codemirror/next/highlight";
+import { defaultHighlightStyle } from "@codemirror/next/highlight";
 import { lintKeymap } from "@codemirror/next/lint";
 
 export const DIAGNOSTICS = [
@@ -61,13 +60,15 @@ export const extensionsA = [
   highlightSpecialChars(),
   history(),
   foldGutter(),
-  multipleSelections(),
+  drawSelection(),
+  EditorState.allowMultipleSelections.of(true),
   indentOnInput(),
-  defaultHighlighter,
+  defaultHighlightStyle,
   bracketMatching(),
   closeBrackets(),
   autocompletion(),
   rectangularSelection(),
+  // highlightActiveLine(),
   highlightSelectionMatches(),
   keymap([
     ...closeBracketsKeymap,

@@ -1,7 +1,7 @@
 import { render, h, Fragment } from "preact";
 import { useState, useCallback, useMemo, useEffect } from "preact/hooks";
 
-import { CodemirrorControlled, createState } from "@mischnic/codemirror-preact";
+import { CodemirrorEditor, createState } from "@mischnic/codemirror-preact";
 
 import {
   extensionsA,
@@ -27,7 +27,7 @@ export function App2() {
         Change extensions to {extensions ? "B" : "A"}
       </button>
       <button onClick={() => setDiagnostics(!diagnostics)}>Build</button>
-      <CodemirrorControlled
+      <CodemirrorEditor
         value={value}
         onChange={setValue}
         readOnly={readOnly}

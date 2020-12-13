@@ -5,7 +5,6 @@ import { memo } from "preact/compat";
 import { EditorView } from "@codemirror/next/view";
 import {
 	EditorState,
-	Change,
 	Transaction,
 	EditorSelection,
 	SelectionRange,
