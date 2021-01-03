@@ -3,10 +3,10 @@ import { useState, useCallback, useMemo, useEffect } from "preact/hooks";
 
 import { Codemirror, createState } from "@mischnic/codemirror-preact";
 
-import { extensions, DIAGNOSTICS, EXAMPLE_1, EXAMPLE_2 } from "./utils.js";
+import { extensionsA, DIAGNOSTICS, EXAMPLE_1, EXAMPLE_2 } from "./utils.js";
 
 export function App1() {
-  const [state, setState] = useState(createState(EXAMPLE_1, extensions));
+  const [state, setState] = useState(createState(EXAMPLE_1, extensionsA));
 
   const [counter, setCounter] = useState(0);
   const [readOnly, setReadOnly] = useState(false);
@@ -18,7 +18,7 @@ export function App1() {
 
   return (
     <>
-      <button onClick={() => setState(createState(EXAMPLE_2, extensions))}>
+      <button onClick={() => setState(createState(EXAMPLE_2, extensionsA))}>
         Update!
       </button>
       <button onClick={() => setReadOnly(!readOnly)}>

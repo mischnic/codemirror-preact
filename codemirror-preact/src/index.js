@@ -2,15 +2,16 @@ import { h } from "preact";
 import { useRef, useEffect, useState, useCallback } from "preact/hooks";
 import { memo } from "preact/compat";
 
-import { EditorView } from "@codemirror/next/view";
+import { EditorView } from "@codemirror/view";
 import {
 	EditorState,
 	Transaction,
 	EditorSelection,
 	SelectionRange,
-} from "@codemirror/next/state";
-import { setDiagnostics } from "@codemirror/next/lint";
-import { StateEffect, StateField } from "@codemirror/next/state";
+	StateEffect,
+	StateField,
+} from "@codemirror/state";
+import { setDiagnostics } from "@codemirror/lint";
 
 const setReadOnlyEffect = StateEffect.define();
 const readOnlyState = StateField.define({
