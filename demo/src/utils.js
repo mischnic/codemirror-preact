@@ -4,7 +4,7 @@ import {
   drawSelection,
   highlightActiveLine,
 } from "@codemirror/view";
-import { Extension, EditorState } from "@codemirror/state";
+import { EditorState } from "@codemirror/state";
 import { history, historyKeymap } from "@codemirror/history";
 import { foldGutter, foldKeymap } from "@codemirror/fold";
 import { indentOnInput } from "@codemirror/language";
@@ -50,7 +50,7 @@ export const extensionsA = [
   drawSelection(),
   EditorState.allowMultipleSelections.of(true),
   indentOnInput(),
-  defaultHighlightStyle,
+  defaultHighlightStyle.fallback,
   bracketMatching(),
   closeBrackets(),
   autocompletion(),

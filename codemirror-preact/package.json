@@ -5,26 +5,24 @@
 	"module": "dist/index.es.js",
 	"source": "src/index.js",
 	"peerDependencies": {
-		"@codemirror/lint": "^0.17.0",
-		"@codemirror/state": "^0.17.0",
-		"@codemirror/view": "^0.17.1",
-		"preact": "^10.5.9"
+		"@codemirror/lint": "^0.18.3",
+		"@codemirror/state": "^0.18.7",
+		"@codemirror/view": "^0.18.12",
+		"preact": "^10.5.13"
 	},
 	"publishConfig": {
 		"public": true
 	},
 	"scripts": {
-		"build": "parcel build . --no-minify",
+		"build": "parcel build . --no-optimize",
 		"prepublishOnly": "yarn build"
 	},
 	"browserslist": [
 		"Chrome 70"
 	],
 	"devDependencies": {
-		"@babel/core": "^7.12.10",
-		"@babel/plugin-transform-react-jsx": "^7.12.12",
-		"parcel": "^2.0.0-nightly.500",
-		"preact": "^10.5.9"
+		"@babel/plugin-transform-react-jsx": "^7.13.12",
+		"preact": "^10.5.13"
 	},
 	"files": [
 		"dist",
