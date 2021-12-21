@@ -3,34 +3,17 @@ import { useRef, useEffect, useState, useCallback } from "preact/hooks";
 import { memo } from "preact/compat";
 
 import { EditorView } from "@codemirror/view";
-import { EditorState, StateEffect, StateField } from "@codemirror/state";
+import { Compartment, EditorState } from "@codemirror/state";
 import { setDiagnostics } from "@codemirror/lint";
 
-const setReadOnlyEffect = StateEffect.define();
-const readOnlyState = StateField.define({
-  create() {
-    return true;
-  },
-  update(value, tr) {
-    for (let effect of tr.effects) {
-      if (effect.is(setReadOnlyEffect)) {
-        value = effect.value;
-      }
-    }
-
-    return value;
-  },
-});
+let readOnlyCompartment = new Compartment();
 
 export function createState(value, extensions) {
   return EditorState.create({
     doc: value,
     extensions: [
       ...extensions,
-      readOnlyState,
-      EditorState.changeFilter.of(
-        ({ startState }) => !startState.field(readOnlyState, false)
-      ),
+      readOnlyCompartment.of(EditorView.editable.of(false)),
     ],
   });
 }
@@ -95,7 +78,9 @@ export const Codemirror = memo(function Codemirror({
   useEffect(() => {
     // if readOnly changes (first and subsequent render)
     view.current.dispatch({
-      effects: setReadOnlyEffect.of(readOnly),
+      effects: readOnlyCompartment.reconfigure(
+        EditorState.readOnly.of(readOnly)
+      ),
     });
   }, [readOnly]);
 
@@ -106,7 +91,9 @@ export const Codemirror = memo(function Codemirror({
     }
 
     view.current.dispatch({
-      effects: setReadOnlyEffect.of(readOnly),
+      effects: readOnlyCompartment.reconfigure(
+        EditorState.readOnly.of(readOnly)
+      ),
     });
   }, [readOnly, state]);
 
