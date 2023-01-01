@@ -1,14 +1,22 @@
-import { h } from "preact";
+import { h, JSX } from "preact";
 import { useRef, useEffect, useState, useCallback } from "preact/hooks";
 import { memo } from "preact/compat";
 
 import { EditorView } from "@codemirror/view";
-import { Compartment, EditorState } from "@codemirror/state";
-import { setDiagnostics } from "@codemirror/lint";
+import {
+  Compartment,
+  EditorState,
+  type Extension,
+  type Transaction,
+} from "@codemirror/state";
+import { setDiagnostics, type Diagnostic } from "@codemirror/lint";
 
 let readOnlyCompartment = new Compartment();
 
-export function createState(value, extensions) {
+export function createState(
+  value: string,
+  extensions: Array<Extension>
+): EditorState {
   return EditorState.create({
     doc: value,
     extensions: [
@@ -20,20 +28,27 @@ export function createState(value, extensions) {
 
 const emittedStates = new WeakSet();
 
-export const Codemirror = memo(function Codemirror({
+const Codemirror = memo(function ({
   state,
   onChange = null,
   readOnly = false,
   diagnostics = null,
   ...rest
-}) {
+}: {
+  state: EditorState;
+  onChange: (v: EditorState, t: Transaction) => void;
+  readOnly: boolean;
+  diagnostics: Array<Diagnostic> | null | undefined;
+} & Omit<JSX.HTMLAttributes<HTMLDivElement>, "onChange">) {
   if (!state) {
     throw new Error("Missing state!");
   }
 
-  const container = useRef(null);
+  const container = useRef<HTMLDivElement>(null);
   const view = useRef(null);
-  const dispatchRefs = useRef({});
+  const dispatchRefs = useRef<{
+    onChange?: (v: EditorState, t: Transaction) => void;
+  }>({});
 
   useEffect(() => {
     dispatchRefs.current.onChange = onChange;
@@ -124,13 +139,20 @@ export const Codemirror = memo(function Codemirror({
   return <div ref={container} {...rest} />;
 });
 
-export function CodemirrorEditor({
+function CodemirrorEditor({
   value,
   onChange: _onChange,
   readOnly,
   diagnostics,
   extensions,
-}) {
+  ...rest
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  readOnly: boolean;
+  diagnostics: Array<Diagnostic> | null | undefined;
+  extensions: Array<Extension>;
+} & Omit<JSX.HTMLAttributes<HTMLDivElement>, "onChange">) {
   const [state, setState] = useState(createState(value, extensions));
 
   useEffect(() => {
@@ -143,12 +165,15 @@ export function CodemirrorEditor({
     setState(createState(value, extensions));
   }, [extensions]);
 
-  const onChange = useCallback((newState, transaction) => {
-    setState(newState);
-    if (!transaction.changes.empty) {
-      _onChange(newState.doc.toString());
-    }
-  }, []);
+  const onChange = useCallback(
+    (newState: EditorState, transaction: Transaction) => {
+      setState(newState);
+      if (!transaction.changes.empty) {
+        _onChange(newState.doc.toString());
+      }
+    },
+    []
+  );
 
   return (
     <Codemirror
@@ -156,7 +181,9 @@ export function CodemirrorEditor({
       onChange={onChange}
       readOnly={readOnly}
       diagnostics={diagnostics}
-      class="editor"
+      {...rest}
     />
   );
 }
+
+export { Codemirror, CodemirrorEditor };

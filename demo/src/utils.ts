@@ -1,27 +1,39 @@
 import {
-  keymap,
-  highlightSpecialChars,
   drawSelection,
   highlightActiveLine,
+  highlightSpecialChars,
+  keymap,
+  lineNumbers,
+  rectangularSelection,
 } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
-import { history, historyKeymap } from "@codemirror/history";
-import { foldGutter, foldKeymap } from "@codemirror/fold";
-import { indentOnInput } from "@codemirror/language";
-import { lineNumbers } from "@codemirror/gutter";
-import { defaultKeymap, indentMore, indentLess } from "@codemirror/commands";
-import { bracketMatching } from "@codemirror/matchbrackets";
-import { closeBrackets, closeBracketsKeymap } from "@codemirror/closebrackets";
+import {
+  indentOnInput,
+  foldGutter,
+  foldKeymap,
+  bracketMatching,
+  defaultHighlightStyle,
+  syntaxHighlighting,
+} from "@codemirror/language";
+import {
+  defaultKeymap,
+  indentMore,
+  indentLess,
+  history,
+  historyKeymap,
+} from "@codemirror/commands";
 import { searchKeymap, highlightSelectionMatches } from "@codemirror/search";
-import { autocompletion, completionKeymap } from "@codemirror/autocomplete";
-import { commentKeymap } from "@codemirror/comment";
-import { rectangularSelection } from "@codemirror/rectangular-selection";
-import { defaultHighlightStyle } from "@codemirror/highlight";
-import { lintKeymap } from "@codemirror/lint";
+import {
+  autocompletion,
+  completionKeymap,
+  closeBrackets,
+  closeBracketsKeymap,
+} from "@codemirror/autocomplete";
+import { Diagnostic, lintKeymap } from "@codemirror/lint";
 
 import { html } from "@codemirror/lang-html";
 
-export const DIAGNOSTICS = [
+export const DIAGNOSTICS: Array<Diagnostic> = [
   {
     from: 18,
     to: 18,
@@ -50,7 +62,7 @@ export const extensionsA = [
   drawSelection(),
   EditorState.allowMultipleSelections.of(true),
   indentOnInput(),
-  defaultHighlightStyle.fallback,
+  syntaxHighlighting(defaultHighlightStyle),
   bracketMatching(),
   closeBrackets(),
   autocompletion(),
@@ -63,7 +75,6 @@ export const extensionsA = [
     ...searchKeymap,
     ...historyKeymap,
     ...foldKeymap,
-    ...commentKeymap,
     ...completionKeymap,
     ...lintKeymap,
     {

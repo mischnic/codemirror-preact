@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2015", "DOM"],
+    "module": "es6",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
+  },
+  "exclude": ["node_modules"],
+  "strict": true,
+  "target": "es2015"
+}

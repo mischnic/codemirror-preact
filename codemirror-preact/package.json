@@ -3,25 +3,26 @@
 	"version": "0.2.0",
 	"license": "MIT",
 	"module": "dist/index.es.js",
-	"source": "src/index.js",
+	"types": "dist/index.d.ts",
+	"source": "src/index.tsx",
 	"peerDependencies": {
-		"@codemirror/lint": "^0.19.3",
-		"@codemirror/state": "^0.19.6",
-		"@codemirror/view": "^0.19.35",
+		"@codemirror/lint": "^6.1.0",
+		"@codemirror/state": "^6.2.0",
+		"@codemirror/view": "^6.7.1",
 		"preact": "^10.5.13"
 	},
 	"publishConfig": {
 		"public": true
 	},
 	"scripts": {
-		"build": "parcel build . --no-optimize",
+		"build": "parcel build .",
 		"prepublishOnly": "yarn build"
 	},
 	"browserslist": [
-		"Chrome 70"
+		"Chrome >=70"
 	],
 	"devDependencies": {
-		"preact": "^10.5.13"
+		"preact": "^10.11.3"
 	},
 	"files": [
 		"dist",

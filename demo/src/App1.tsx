@@ -1,9 +1,9 @@
-import { render, h, Fragment } from "preact";
-import { useState, useCallback, useMemo, useEffect } from "preact/hooks";
+import { useState, useCallback } from "preact/hooks";
 
 import { Codemirror, createState } from "@mischnic/codemirror-preact";
 
-import { extensionsA, DIAGNOSTICS, EXAMPLE_1, EXAMPLE_2 } from "./utils.js";
+import { extensionsA, DIAGNOSTICS, EXAMPLE_1, EXAMPLE_2 } from "./utils";
+import { EditorState } from "@codemirror/state";
 
 export function App1() {
   const [state, setState] = useState(createState(EXAMPLE_1, extensionsA));
@@ -12,7 +12,7 @@ export function App1() {
   const [readOnly, setReadOnly] = useState(false);
   const [diagnostics, setDiagnostics] = useState(false);
 
-  const onChange = useCallback((state) => {
+  const onChange = useCallback((state: EditorState) => {
     setState(state);
   }, []);
 
@@ -33,7 +33,7 @@ export function App1() {
         state={state}
         onChange={onChange}
         readOnly={readOnly}
-        diagnostics={diagnostics && DIAGNOSTICS}
+        diagnostics={diagnostics ? DIAGNOSTICS : undefined}
         class="editor"
       />
       State:

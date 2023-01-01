@@ -1,7 +1,6 @@
-import { render, h, Fragment } from "preact";
-import { useState, useCallback, useMemo, useEffect } from "preact/hooks";
+import { useState } from "preact/hooks";
 
-import { CodemirrorEditor, createState } from "@mischnic/codemirror-preact";
+import { CodemirrorEditor } from "@mischnic/codemirror-preact";
 
 import {
   extensionsA,
@@ -9,7 +8,7 @@ import {
   DIAGNOSTICS,
   EXAMPLE_1,
   EXAMPLE_2,
-} from "./utils.js";
+} from "./utils";
 
 export function App2() {
   const [value, setValue] = useState(EXAMPLE_1);
@@ -33,6 +32,7 @@ export function App2() {
         readOnly={readOnly}
         diagnostics={diagnostics && DIAGNOSTICS}
         extensions={extensions ? extensionsA : extensionsB}
+        class="editor"
       />
       Value:
       <pre>
